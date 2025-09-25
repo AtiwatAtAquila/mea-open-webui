@@ -36,20 +36,19 @@
 
 	import EllipsisHorizontal from '../icons/EllipsisHorizontal.svelte';
 	import ChatPlus from '../icons/ChatPlus.svelte';
+	import ChatCheck from '../icons/ChatCheck.svelte';
 
 	import logoImage from './favicon.png';
 
 	const i18n = getContext('i18n');
 
 	export let initNewChat: Function;
-	export let title: string = $WEBUI_NAME;
 	export let shareEnabled: boolean = false;
 
 	export let chat;
 	export let history;
 	export let selectedModels;
 	export let showModelSelector = true;
-	export let showBanners = true;
 
 	export let onSaveTempChat: () => {};
 	export let archiveChatHandler: (id: string) => void;
@@ -153,11 +152,29 @@
 									}}
 								>
 									<div class=" m-auto self-center">
-										<ChatPlus className=" size-4.5" strokeWidth="1.5" />
+										<ChatCheck className=" size-4.5" strokeWidth="1.5" />
 									</div>
 								</button>
 							</Tooltip>
 						{/if}
+					{/if}
+
+					{#if $mobile && !$temporaryChatEnabled && chat && chat.id}
+						<Tooltip content={$i18n.t('New Chat')}>
+							<button
+								class=" flex {$showSidebar
+									? 'md:hidden'
+									: ''} cursor-pointer px-2 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+								on:click={() => {
+									initNewChat();
+								}}
+								aria-label="New Chat"
+							>
+								<div class=" m-auto self-center">
+									<ChatPlus className=" size-4.5" strokeWidth="1.5" />
+								</div>
+							</button>
+						</Tooltip>
 					{/if}
 
 					{#if shareEnabled && chat && (chat.id || $temporaryChatEnabled)}
@@ -194,24 +211,6 @@
 							>
 								<div class=" m-auto self-center">
 									<AdjustmentsHorizontal className=" size-5" strokeWidth="1" />
-								</div>
-							</button>
-						</Tooltip>
-					{/if}
-
-					{#if $mobile}
-						<Tooltip content={$i18n.t('New Chat')}>
-							<button
-								class=" flex {$showSidebar
-									? 'md:hidden'
-									: ''} cursor-pointer px-2 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-850 transition"
-								on:click={() => {
-									initNewChat();
-								}}
-								aria-label="New Chat"
-							>
-								<div class=" m-auto self-center">
-									<PencilSquare className=" size-5" strokeWidth="2" />
 								</div>
 							</button>
 						</Tooltip>
@@ -256,7 +255,7 @@
 
 	<div class="absolute top-[100%] left-0 right-0 h-fit">
 		{#if !history.currentId && !$chatId && ($banners.length > 0 || ($config?.license_metadata?.type ?? null) === 'trial' || (($config?.license_metadata?.seats ?? null) !== null && $config?.user_count > $config?.license_metadata?.seats))}
-			<div class=" w-full z-30 mt-5">
+			<div class=" w-full z-30 mt-4">
 				<div class=" flex flex-col gap-1 w-full">
 					{#if ($config?.license_metadata?.type ?? null) === 'trial'}
 						<Banner
@@ -282,30 +281,28 @@
 						/>
 					{/if}
 
-					{#if showBanners}
-						{#each $banners.filter((b) => ![...JSON.parse(localStorage.getItem('dismissedBannerIds') ?? '[]'), ...closedBannerIds].includes(b.id)) as banner (banner.id)}
-							<Banner
-								{banner}
-								on:dismiss={(e) => {
-									const bannerId = e.detail;
+					{#each $banners.filter((b) => ![...JSON.parse(localStorage.getItem('dismissedBannerIds') ?? '[]'), ...closedBannerIds].includes(b.id)) as banner (banner.id)}
+						<Banner
+							{banner}
+							on:dismiss={(e) => {
+								const bannerId = e.detail;
 
-									if (banner.dismissible) {
-										localStorage.setItem(
-											'dismissedBannerIds',
-											JSON.stringify(
-												[
-													bannerId,
-													...JSON.parse(localStorage.getItem('dismissedBannerIds') ?? '[]')
-												].filter((id) => $banners.find((b) => b.id === id))
-											)
-										);
-									} else {
-										closedBannerIds = [...closedBannerIds, bannerId];
-									}
-								}}
-							/>
-						{/each}
-					{/if}
+								if (banner.dismissible) {
+									localStorage.setItem(
+										'dismissedBannerIds',
+										JSON.stringify(
+											[
+												bannerId,
+												...JSON.parse(localStorage.getItem('dismissedBannerIds') ?? '[]')
+											].filter((id) => $banners.find((b) => b.id === id))
+										)
+									);
+								} else {
+									closedBannerIds = [...closedBannerIds, bannerId];
+								}
+							}}
+						/>
+					{/each}
 				</div>
 			</div>
 		{/if}
