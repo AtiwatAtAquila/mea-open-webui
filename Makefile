@@ -31,3 +31,9 @@ update:
 	$(DOCKER_COMPOSE) up --build -d
 	$(DOCKER_COMPOSE) start
 
+
+sync-upstream:
+	git fetch upstream
+	git checkout main
+	git merge upstream/main
+	git push origin main
