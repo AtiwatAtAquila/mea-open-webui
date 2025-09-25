@@ -62,6 +62,7 @@
 	import PinnedModelList from './Sidebar/PinnedModelList.svelte';
 	import Note from '../icons/Note.svelte';
 	import { slide } from 'svelte/transition';
+	import logoImage from './favicon.png';
 
 	const BREAKPOINT = 768;
 
@@ -513,7 +514,7 @@
 
 {#if !$mobile && !$showSidebar}
 	<div
-		class=" py-2 px-1.5 flex flex-col justify-between text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-950 h-full border-e border-gray-50 dark:border-gray-850 z-10 transition-all"
+		class=" py-2 px-1.5 flex flex-col justify-between text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-950 h-full border-e border-gray-50 dark:border-gray-850 z-10 transition-all"
 		id="sidebar"
 	>
 		<button
@@ -536,7 +537,7 @@
 						<div class=" self-center flex items-center justify-center size-9">
 							<img
 								crossorigin="anonymous"
-								src="{WEBUI_BASE_URL}/static/favicon.png"
+								src={logoImage}
 								class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
 								alt=""
 							/>
@@ -549,7 +550,7 @@
 
 			<div>
 				<div class="">
-					<Tooltip content={$i18n.t('New Chat')} placement="right">
+					<Tooltip content={$i18n.t('แชทใหม่')} placement="right">
 						<a
 							class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 							href="/"
@@ -561,7 +562,7 @@
 								goto('/');
 								newChatHandler();
 							}}
-							aria-label={$i18n.t('New Chat')}
+							aria-label={$i18n.t('แชทใหม่')}
 						>
 							<div class=" self-center flex items-center justify-center size-9">
 								<PencilSquare className="size-4.5" />
@@ -571,7 +572,7 @@
 				</div>
 
 				<div class="">
-					<Tooltip content={$i18n.t('Search')} placement="right">
+					<Tooltip content={$i18n.t('ค้นหา')} placement="right">
 						<button
 							class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 							on:click={(e) => {
@@ -581,7 +582,7 @@
 								showSearch.set(true);
 							}}
 							draggable="false"
-							aria-label={$i18n.t('Search')}
+							aria-label={$i18n.t('ค้นหา')}
 						>
 							<div class=" self-center flex items-center justify-center size-9">
 								<Search className="size-4.5" />
@@ -592,7 +593,7 @@
 
 				{#if ($config?.features?.enable_notes ?? false) && ($user?.role === 'admin' || ($user?.permissions?.features?.notes ?? true))}
 					<div class="">
-						<Tooltip content={$i18n.t('Notes')} placement="right">
+						<Tooltip content={$i18n.t('โน๊ต')} placement="right">
 							<a
 								class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 								href="/notes"
@@ -604,7 +605,7 @@
 									itemClickHandler();
 								}}
 								draggable="false"
-								aria-label={$i18n.t('Notes')}
+								aria-label={$i18n.t('โน๊ต')}
 							>
 								<div class=" self-center flex items-center justify-center size-9">
 									<Note className="size-4.5" />
@@ -616,7 +617,7 @@
 
 				{#if $user?.role === 'admin' || $user?.permissions?.workspace?.models || $user?.permissions?.workspace?.knowledge || $user?.permissions?.workspace?.prompts || $user?.permissions?.workspace?.tools}
 					<div class="">
-						<Tooltip content={$i18n.t('Workspace')} placement="right">
+						<Tooltip content={$i18n.t('พื้นที่ทำงาน')} placement="right">
 							<a
 								class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 								href="/workspace"
@@ -627,7 +628,7 @@
 									goto('/workspace');
 									itemClickHandler();
 								}}
-								aria-label={$i18n.t('Workspace')}
+								aria-label={$i18n.t('พื้นที่ทำงาน')}
 								draggable="false"
 							>
 								<div class=" self-center flex items-center justify-center size-9">
@@ -670,7 +671,7 @@
 							>
 								<div class=" self-center flex items-center justify-center size-9">
 									<img
-										src={$user?.profile_image_url}
+										src={logoImage}
 										class=" size-6 object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
@@ -690,7 +691,7 @@
 		bind:this={navElement}
 		id="sidebar"
 		class="h-screen max-h-[100dvh] min-h-screen select-none {$showSidebar
-			? 'bg-gray-50 dark:bg-gray-950 z-50'
+			? 'bg-gray-100 dark:bg-gray-950 z-50'
 			: ' bg-transparent z-0 '} {$isApp
 			? `ml-[4.5rem] md:ml-0 `
 			: ' transition-all duration-300 '} shrink-0 text-gray-900 dark:text-gray-200 text-sm fixed top-0 left-0 overflow-x-hidden
@@ -704,7 +705,7 @@
 				: 'invisible'}"
 		>
 			<div
-				class="sidebar px-1.5 pt-2 pb-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400 sticky top-0 z-10 bg-gray-50 dark:bg-gray-950"
+				class="sidebar px-1.5 pt-2 pb-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400 sticky top-0 z-10 bg-gray-100 dark:bg-gray-950"
 			>
 				<a
 					class="flex items-center rounded-lg p-1.5 h-full justify-center hover:bg-gray-100 dark:hover:bg-gray-850 transition no-drag-region"
@@ -714,7 +715,7 @@
 				>
 					<img
 						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/favicon.png"
+						src={logoImage}
 						class="sidebar-new-chat-icon size-6 rounded-full"
 						alt=""
 					/>
@@ -753,14 +754,14 @@
 						href="/"
 						draggable="false"
 						on:click={newChatHandler}
-						aria-label={$i18n.t('New Chat')}
+						aria-label={$i18n.t('แชทใหม่')}
 					>
 						<div class="self-center">
 							<PencilSquare className=" size-4.5" strokeWidth="2" />
 						</div>
 
 						<div class="flex self-center translate-y-[0.5px]">
-							<div class=" self-center text-sm font-primary">{$i18n.t('New Chat')}</div>
+							<div class=" self-center text-sm font-primary">{$i18n.t('แชทใหม่')}</div>
 						</div>
 					</a>
 				</div>
@@ -772,14 +773,14 @@
 							showSearch.set(true);
 						}}
 						draggable="false"
-						aria-label={$i18n.t('Search')}
+						aria-label={$i18n.t('ค้นหา')}
 					>
 						<div class="self-center">
 							<Search strokeWidth="2" className="size-4.5" />
 						</div>
 
 						<div class="flex self-center translate-y-[0.5px]">
-							<div class=" self-center text-sm font-primary">{$i18n.t('Search')}</div>
+							<div class=" self-center text-sm font-primary">{$i18n.t('ค้นหา')}</div>
 						</div>
 					</button>
 				</div>
@@ -791,14 +792,14 @@
 							href="/notes"
 							on:click={itemClickHandler}
 							draggable="false"
-							aria-label={$i18n.t('Notes')}
+							aria-label={$i18n.t('โน๊ต')}
 						>
 							<div class="self-center">
 								<Note className="size-4.5" strokeWidth="2" />
 							</div>
 
 							<div class="flex self-center translate-y-[0.5px]">
-								<div class=" self-center text-sm font-primary">{$i18n.t('Notes')}</div>
+								<div class=" self-center text-sm font-primary">{$i18n.t('โน๊ต')}</div>
 							</div>
 						</a>
 					</div>
@@ -811,7 +812,7 @@
 							href="/workspace"
 							on:click={itemClickHandler}
 							draggable="false"
-							aria-label={$i18n.t('Workspace')}
+							aria-label={$i18n.t('พื้นที่ทำงาน')}
 						>
 							<div class="self-center">
 								<svg
@@ -831,7 +832,7 @@
 							</div>
 
 							<div class="flex self-center translate-y-[0.5px]">
-								<div class=" self-center text-sm font-primary">{$i18n.t('Workspace')}</div>
+								<div class=" self-center text-sm font-primary">{$i18n.t('พื้นที่ทำงาน')}</div>
 							</div>
 						</a>
 					</div>
@@ -873,7 +874,7 @@
 
 				<Folder
 					className="px-2 mt-0.5"
-					name={$i18n.t('Chats')}
+					name={$i18n.t('แชท')}
 					chevron={false}
 					onAdd={() => {
 						showCreateFolderModal = true;
@@ -1131,7 +1132,7 @@
 				</Folder>
 			</div>
 
-			<div class="px-1.5 pt-1.5 pb-2 sticky bottom-0 z-10 bg-gray-50 dark:bg-gray-950 sidebar">
+			<div class="px-1.5 pt-1.5 pb-2 sticky bottom-0 z-10 bg-gray-100 dark:bg-gray-950 sidebar">
 				<div class="flex flex-col font-primary">
 					{#if $user !== undefined && $user !== null}
 						<UserMenu
@@ -1147,7 +1148,7 @@
 							>
 								<div class=" self-center mr-3">
 									<img
-										src={$user?.profile_image_url}
+										src={logoImage}
 										class=" size-6 object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}

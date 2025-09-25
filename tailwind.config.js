@@ -9,18 +9,18 @@ export default {
 		extend: {
 			colors: {
 				gray: {
-					50: 'var(--color-gray-50, #f9f9f9)',
-					100: 'var(--color-gray-100, #ececec)',
-					200: 'var(--color-gray-200, #e3e3e3)',
-					300: 'var(--color-gray-300, #cdcdcd)',
-					400: 'var(--color-gray-400, #b4b4b4)',
-					500: 'var(--color-gray-500, #9b9b9b)',
-					600: 'var(--color-gray-600, #676767)',
-					700: 'var(--color-gray-700, #4e4e4e)',
-					800: 'var(--color-gray-800, #333)',
-					850: 'var(--color-gray-850, #262626)',
-					900: 'var(--color-gray-900, #171717)',
-					950: 'var(--color-gray-950, #0d0d0d)'
+					50: 'var(--color-gray-50, #FFF4F0)', // Light MEA tint
+					100: 'var(--color-gray-100, #FFE6DB)', // Very light orange
+					200: 'var(--color-gray-200, #FFCDB8)', // Light orange
+					300: 'var(--color-gray-300, #E5E5E5)', // Neutral
+					400: 'var(--color-gray-400, #B4B4B4)', // Keep existing
+					500: 'var(--color-gray-500, #9B9B9B)', // Keep existing
+					600: 'var(--color-gray-600, #676767)', // Keep existing
+					700: 'var(--color-gray-700, #4E4E4E)', // Keep existing
+					800: 'var(--color-gray-800, #2C1810)', // Dark MEA brown
+					850: 'var(--color-gray-850, #1A0F0A)', // Darker MEA brown
+					900: 'var(--color-gray-900, #0F0807)', // Very dark MEA
+					950: 'var(--color-gray-950, #0A0504)' // Darkest MEA
 				}
 			},
 			typography: {

@@ -31,7 +31,7 @@
 						: ''} mr-1.5 mt-0.5 self-start flex flex-none items-center text-gray-600 dark:text-gray-400"
 				>
 					<Tooltip
-						content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
+						content={$showSidebar ? $i18n.t('YOOOO') : $i18n.t('Open Sidebar')}
 						interactive={true}
 					>
 						<button

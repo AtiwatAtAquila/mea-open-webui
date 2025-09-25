@@ -37,6 +37,8 @@
 	import EllipsisHorizontal from '../icons/EllipsisHorizontal.svelte';
 	import ChatPlus from '../icons/ChatPlus.svelte';
 
+	import logoImage from './favicon.png';
+
 	const i18n = getContext('i18n');
 
 	export let initNewChat: Function;
@@ -67,14 +69,12 @@
 	on:click={() => {
 		initNewChat();
 	}}
-	aria-label="New Chat"
+	aria-label="Banana"
 />
 
 <nav class="sticky top-0 z-30 w-full py-1 -mb-8 flex flex-col items-center drag-region">
 	<div class="flex items-center w-full pl-1.5 pr-1">
-		<div
-			class=" bg-linear-to-b via-50% from-white via-white to-transparent dark:from-gray-900 dark:via-gray-900 dark:to-transparent pointer-events-none absolute inset-0 -bottom-7 z-[-1]"
-		></div>
+		<div class=" bg-gray-50 pointer-events-none absolute inset-0 -bottom-7 z-[-1]"></div>
 
 		<div class=" flex max-w-full w-full mx-auto px-1.5 md:px-2 pt-0.5 bg-transparent">
 			<div class="flex items-center w-full max-w-full">
@@ -234,7 +234,7 @@
 								<div class=" self-center">
 									<span class="sr-only">{$i18n.t('User menu')}</span>
 									<img
-										src={$user?.profile_image_url}
+										src={logoImage}
 										class="size-6 object-cover rounded-full"
 										alt=""
 										draggable="false"

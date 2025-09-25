@@ -27,6 +27,8 @@
 	import FolderTitle from './Placeholder/FolderTitle.svelte';
 	import { getChatList } from '$lib/apis/chats';
 
+	import logoImage from './favicon.png';
+
 	const i18n = getContext('i18n');
 
 	export let createMessagePair: Function;
@@ -125,10 +127,7 @@
 									>
 										<img
 											crossorigin="anonymous"
-											src={model?.info?.meta?.profile_image_url ??
-												($i18n.language === 'dg-DG'
-													? `${WEBUI_BASE_URL}/doge.png`
-													: `${WEBUI_BASE_URL}/static/favicon.png`)}
+											src={logoImage}
 											class=" size-9 @sm:size-10 rounded-full border-[1px] border-gray-100 dark:border-none"
 											aria-hidden="true"
 											draggable="false"
