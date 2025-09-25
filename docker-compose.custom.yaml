@@ -1,0 +1,141 @@
+networks:
+  open-webui:
+    external: true
+
+volumes:
+  qdrant:
+  open-webui:
+  postgres:
+  redis:
+  redis-insight:
+
+services:
+  postgres:
+    image: postgres
+    container_name: db
+    restart: unless-stopped
+    user: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=openwebui
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=openwebui
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", -U, openwebui]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  redis:
+    image: redis:8-alpine
+    container_name: redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", myredispassword]
+    volumes:
+      - redis:/data
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: [CMD, redis-cli, --raw, incr, ping]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    environment:
+      - RI_APP_PORT=5540
+      - RI_APP_HOST=0.0.0.0
+      # - RI_PROXY_PATH=use when do reverse proxy
+      - RI_REDIS_HOST=redis
+      - RI_REDIS_PORT=6379
+      # - RI_REDIS_USERNAME=
+      - RI_REDIS_PASSWORD=myredispassword
+    ports:
+      - 5540:5540
+    volumes:
+      - redis-insight:/data
+    healthcheck:
+      test: [CMD, curl, --fail, http://localhost:5540/api/health]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333" # HTTP API
+      - "6334:6334" # gRPC API
+    volumes:
+      - qdrant:/qdrant/storage
+    environment:
+      - QDRANT_ALLOW_ORIGIN=*
+
+  tika:
+    image: apache/tika:latest-full
+    container_name: tika
+    ports:
+      - "9998:9998"
+    restart: unless-stopped
+
+  docling:
+    image: quay.io/docling-project/docling-serve
+    container_name: docling
+    environment:
+      DOCLING_SERVE_ENABLE_UI: 1
+    ports:
+      - 5001:5001
+
+  open-webui:
+    # image: ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui:me
+    container_name: open-webui
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "3000:8080"
+    environment:
+      # ** OLLAMA **
+      ENABLE_OLLAMA_API: True
+      OLLAMA_BASE_URL: http://localhost:11434
+      # OLLAMA_BASE_URLS: http://host-one:11434;http://host-two:11434
+
+      # ** OpenAI **
+      # ENABLE_OPENAI_API: True
+      # OPENAI_API_BASE_URL: https://api.openai.com/v1
+      # OPENAI_API_BASE_URLS: https://api.openai.com/v1,http://host-one:11434;http://host-two:11434
+      # OPENAI_API_KEY: sk-124781258123
+      # OPENAI_API_KEYS: sk-124781258123;sk-4389759834759834
+
+      # ** Vector DB **
+      VECTOR_DB: qdrant # chroma, elasticsearch, milvus, opensearch, pgvector, qdrant, pinecone, s3vector, oracle23ai
+      # QDRANT_API_KEY: abc
+      QDRANT_URI: http://qdrant:6333
+      # QDRANT_PREFER_GRPC: False
+
+      # ** Content Extraction Engine **
+      # ## if use docling ##
+      # CONTENT_EXTRACTION_ENGINE: docling
+      # DOCLING_SERVER_URL: http://docling:5001
+      # ## if use tika ##
+      CONTENT_EXTRACTION_ENGINE: tika
+      DOCLING_SERVER_URL: http://tika:9998
+
+      # ** RAG Embedding Engine **
+      # RAG_EMBEDDING_ENGINE: openai | ollama
+      # RAG_EMBEDDING_MODEL:
+
+      # ** Database **
+      DATABASE_URL: postgresql://openwebui:mysecretpassword@postgres:5432/openwebui
+      DATABASE_TYPE: postgresql
+
+      # ** Redis **
+      REDIS_URL: redis://default:myredispassword@redis:6379
+
+    volumes:
+      - open-webui:/app/backend/data
+    restart: unless-stopped
